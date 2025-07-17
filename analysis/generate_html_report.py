@@ -26,6 +26,15 @@ def generate_html_report(data):
     fbc_operators = data['summary'].get('fbc_operators', 0)
     fbc_version_counts = data['summary'].get('fbc_openshift_version_counts', {})
     
+    # Certification risk statistics
+    risk_counts = data['summary'].get('certification_risk_counts', {})
+    version_type_counts = data['summary'].get('version_type_counts', {})
+    operators_at_risk = data['summary'].get('operators_at_risk', 0)
+    
+    # High risk operators for policy section
+    high_risk_ops = sorted([op for op in data['operators'] if op.get('certification_risk') == 'high'], 
+                          key=lambda x: x.get('last_update', ''), reverse=False)[:20]
+    
     # OpenShift version stats from summary
     version_counts = data['summary']['openshift_version_counts']
     
@@ -197,10 +206,18 @@ def generate_html_report(data):
             width: 80px;
             font-weight: 600;
             margin-right: 10px;
+            flex-shrink: 0;
+        }}
+        .bar-container {{
+            flex: 1;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            height: 25px;
+            position: relative;
         }}
         .bar-fill {{
             background: linear-gradient(90deg, #3498db, #2ecc71);
-            height: 25px;
+            height: 100%;
             border-radius: 4px;
             display: flex;
             align-items: center;
@@ -208,6 +225,8 @@ def generate_html_report(data):
             color: white;
             font-weight: 600;
             font-size: 12px;
+            min-width: 0;
+            box-sizing: border-box;
         }}
         .timestamp {{
             color: #7f8c8d;
@@ -223,6 +242,54 @@ def generate_html_report(data):
         .no-versions {{
             color: #e74c3c;
             font-style: italic;
+        }}
+        .risk-warning {{
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }}
+        .risk-high {{
+            background-color: #ffebee;
+            border-left: 4px solid #e74c3c;
+        }}
+        .risk-medium {{
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+        }}
+        .risk-low {{
+            background-color: #f3e5f5;
+            border-left: 4px solid #9c27b0;
+        }}
+        .risk-none {{
+            background-color: #e8f5e8;
+            border-left: 4px solid #4caf50;
+        }}
+        .version-type-open {{
+            background-color: #ffebee;
+            color: #d32f2f;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }}
+        .version-type-explicit {{
+            background-color: #e8f5e8;
+            color: #388e3c;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }}
+        .version-type-ranged {{
+            background-color: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
         }}
     </style>
 </head>
@@ -253,6 +320,77 @@ def generate_html_report(data):
             </div>
         </div>
 
+
+        <h3>📋 Version Type Distribution</h3>
+        <div class="chart-container">
+            <p>Analysis of how operators specify OpenShift version support:</p>"""
+
+    # Add version type chart
+    if version_type_counts:
+        max_type_count = max(version_type_counts.values()) if version_type_counts else 1
+        for version_type, count in sorted(version_type_counts.items(), key=lambda x: x[1], reverse=True):
+            bar_width = (count / max_type_count) * 100
+            type_colors = {
+                'open_ended': 'linear-gradient(90deg, #e74c3c, #c0392b)',
+                'explicit': 'linear-gradient(90deg, #27ae60, #229954)', 
+                'ranged': 'linear-gradient(90deg, #3498db, #2980b9)',
+                'mixed': 'linear-gradient(90deg, #f39c12, #e67e22)',
+                'none': 'linear-gradient(90deg, #95a5a6, #7f8c8d)'
+            }
+            color = type_colors.get(version_type, 'linear-gradient(90deg, #3498db, #2ecc71)')
+            type_name = version_type.replace('_', ' ').title()
+            html += f"""
+            <div class="bar">
+                <div class="bar-label" style="width: 100px;">{type_name}</div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: {bar_width}%; background: {color};">
+                        {count} operators
+                    </div>
+                </div>
+            </div>
+"""
+
+    html += """
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Version Type</th>
+                    <th>Description</th>
+                    <th>Operators</th>
+                </tr>
+            </thead>
+            <tbody>"""
+    
+    # Add version type table rows dynamically
+    html += f"""
+                <tr>
+                    <td><span class="version-type-open">Open Ended</span></td>
+                    <td>Versions like "v4.8" - claim support for all subsequent versions</td>
+                    <td>{version_type_counts.get('open_ended', 0)}</td>
+                </tr>
+                <tr>
+                    <td><span class="version-type-explicit">Explicit</span></td>
+                    <td>Versions like "=v4.8" - support only specific versions</td>
+                    <td>{version_type_counts.get('explicit', 0)}</td>
+                </tr>
+                <tr>
+                    <td><span class="version-type-ranged">Ranged</span></td>
+                    <td>Versions like "v4.8-v4.12" - support explicit range</td>
+                    <td>{version_type_counts.get('ranged', 0)}</td>
+                </tr>
+                <tr>
+                    <td><span class="version-type-open">Mixed</span></td>
+                    <td>Combination of different version types</td>
+                    <td>{version_type_counts.get('mixed', 0)}</td>
+                </tr>
+            </tbody>
+        </table>"""
+
+
+    html += """
+
         <h2>📊 OpenShift Version Support</h2>
         <div class="chart-container">
             <h3>Top 10 OpenShift Versions by Operator Count</h3>
@@ -265,8 +403,10 @@ def generate_html_report(data):
         html += f"""
             <div class="bar">
                 <div class="bar-label">{version}</div>
-                <div class="bar-fill" style="width: {bar_width}%;">
-                    {count} operators ({percentage:.1f}%)
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: {bar_width}%;">
+                        {count} operators ({percentage:.1f}%)
+                    </div>
                 </div>
             </div>
 """
@@ -289,8 +429,10 @@ def generate_html_report(data):
             html += f"""
             <div class="bar">
                 <div class="bar-label">{version}</div>
-                <div class="bar-fill" style="width: {bar_width}%; background: linear-gradient(90deg, #9b59b6, #8e44ad);">
-                    {count} FBC operators
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: {bar_width}%; background: linear-gradient(90deg, #9b59b6, #8e44ad);">
+                        {count} FBC operators
+                    </div>
                 </div>
             </div>
 """
@@ -464,8 +606,10 @@ def generate_html_report(data):
             html += f"""
             <div class="bar">
                 <div class="bar-label">{vendor}</div>
-                <div class="bar-fill" style="width: {bar_width}%; background: {'linear-gradient(90deg, #e74c3c, #c0392b)' if vendor == 'stackable' else 'linear-gradient(90deg, #3498db, #2ecc71)'};">
-                    {stats['freshness_score']:.1f}% ({stats['recent_updates']}/{stats['count']})
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: {bar_width}%; background: {'linear-gradient(90deg, #e74c3c, #c0392b)' if vendor == 'stackable' else 'linear-gradient(90deg, #3498db, #2ecc71)'};">
+                        {stats['freshness_score']:.1f}% ({stats['recent_updates']}/{stats['count']})
+                    </div>
                 </div>
             </div>
 """
@@ -541,8 +685,10 @@ def generate_html_report(data):
             html += f"""
             <div class="bar">
                 <div class="bar-label">{period}</div>
-                <div class="bar-fill" style="width: {bar_width}%;">
-                    {count} operators
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: {bar_width}%;">
+                        {count} operators
+                    </div>
                 </div>
             </div>
 """

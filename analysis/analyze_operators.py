@@ -87,6 +87,100 @@ def parse_openshift_versions(version_str):
     
     return versions
 
+def analyze_version_type(version_str):
+    """Analyze version specification type according to Red Hat policy
+    
+    Returns:
+    - 'open_ended': versions like "v4.8" that apply to all subsequent versions
+    - 'explicit': versions like "=v4.8" that apply only to specific version
+    - 'ranged': versions like "v4.8-v4.12" that apply to inclusive range
+    - 'mixed': contains multiple types
+    """
+    if not version_str:
+        return 'none'
+    
+    # Remove quotes and whitespace
+    version_str = version_str.strip(' "\'')
+    
+    # Split by comma to handle mixed formats
+    parts = [part.strip() for part in version_str.split(',')]
+    
+    types_found = set()
+    
+    for part in parts:
+        if not part:
+            continue
+            
+        # Check for range format: v4.11-v4.18
+        if re.match(r'v(\d+)\.(\d+)-v(\d+)\.(\d+)', part):
+            types_found.add('ranged')
+            continue
+        
+        # Check for explicit format: =v4.12
+        if re.match(r'=v(\d+)\.(\d+)', part):
+            types_found.add('explicit')
+            continue
+        
+        # Check for open-ended format: v4.12
+        if re.match(r'v(\d+)\.(\d+)', part):
+            types_found.add('open_ended')
+            continue
+    
+    if len(types_found) == 0:
+        return 'none'
+    elif len(types_found) == 1:
+        return list(types_found)[0]
+    else:
+        return 'mixed'
+
+def calculate_certification_risk(operator_data):
+    """Calculate certification risk based on Red Hat policy changes
+    
+    Red Hat policy: Operators with open-ended versions (like "v4.8") that haven't
+    been updated in 12+ months will be dropped from v4.19 index.
+    
+    Returns risk level: 'high', 'medium', 'low', 'none'
+    """
+    if not operator_data.get('last_update'):
+        return 'unknown'
+    
+    # Parse last update date
+    try:
+        last_update = datetime.datetime.fromisoformat(operator_data['last_update'].replace('Z', '+00:00'))
+    except (ValueError, AttributeError):
+        return 'unknown'
+    
+    # Calculate months since last update
+    now = datetime.datetime.now()
+    months_since_update = (now - last_update).days / 30.44  # Average days per month
+    
+    # Check if operator has any open-ended versions
+    has_open_ended = False
+    has_only_explicit = True
+    
+    for version_info in operator_data.get('versions', []):
+        openshift_versions_str = ''
+        if version_info.get('annotations'):
+            openshift_versions_str = version_info['annotations'].get('com.redhat.openshift.versions', '')
+        
+        version_type = analyze_version_type(openshift_versions_str)
+        
+        if version_type in ['open_ended', 'mixed']:
+            has_open_ended = True
+            has_only_explicit = False
+        elif version_type in ['ranged']:
+            has_only_explicit = False
+    
+    # Apply Red Hat policy risk assessment
+    if has_open_ended and months_since_update >= 12:
+        return 'high'  # Will be dropped from v4.19 index
+    elif has_open_ended and months_since_update >= 9:
+        return 'medium'  # Approaching 12-month threshold
+    elif has_open_ended and months_since_update >= 6:
+        return 'low'  # May need attention soon
+    else:
+        return 'none'  # No risk or uses explicit/ranged versioning
+
 def analyze_fbc_catalogs(operator_path):
     """Analyze FBC (File-Based Catalog) templates if they exist"""
     catalog_templates_path = os.path.join(operator_path, 'catalog-templates')
@@ -122,26 +216,9 @@ def analyze_fbc_catalogs(operator_path):
 def get_git_last_commit_time(directory):
     """Get the last commit time for a directory using git log"""
     try:
-        # Get the absolute path to ensure we're working with the correct directory
-        abs_directory = os.path.abspath(directory)
-        
-        # Find the git repository root
-        repo_root = abs_directory
-        while repo_root != '/':
-            if os.path.exists(os.path.join(repo_root, '.git')):
-                break
-            repo_root = os.path.dirname(repo_root)
-        
-        if repo_root == '/':
-            # Not in a git repository
-            return get_directory_mtime_fallback(directory)
-        
-        # Get the relative path from the repo root
-        relative_path = os.path.relpath(abs_directory, repo_root)
-        
         # Use git log to get the last commit that modified this directory
         cmd = [
-            'git', '-C', repo_root, 'log', '-1', '--format=%ct', '--', relative_path
+            'git', 'log', '-n' '1', '--format=%ct', '--', directory
         ]
         
         result = subprocess.run(cmd, capture_output=True, text=True, check=True)
@@ -154,30 +231,6 @@ def get_git_last_commit_time(directory):
         return None
         
     except (subprocess.CalledProcessError, ValueError, OSError) as e:
-        # Fallback to directory mtime if git fails
-        return get_directory_mtime_fallback(directory)
-
-def get_directory_mtime_fallback(directory):
-    """Fallback method using directory modification time"""
-    try:
-        path = Path(directory)
-        if not path.exists():
-            return None
-            
-        # Get the directory's own mtime
-        latest_mtime = path.stat().st_mtime
-        
-        # Check all subdirectories and files for latest mtime
-        for item in path.rglob('*'):
-            try:
-                item_mtime = item.stat().st_mtime
-                if item_mtime > latest_mtime:
-                    latest_mtime = item_mtime
-            except (OSError, PermissionError):
-                continue
-                
-        return datetime.datetime.fromtimestamp(latest_mtime)
-    except (OSError, PermissionError):
         return None
 
 def analyze_operator(operator_path):
@@ -232,13 +285,15 @@ def analyze_operator(operator_path):
             clean_version = re.sub(r'^v', '', version_str)
             parts = re.split(r'[-.]', clean_version)
             
-            # Convert to integers where possible, keep strings otherwise
+            # Convert to consistent types for comparison
             numeric_parts = []
             for part in parts:
                 try:
-                    numeric_parts.append(int(part))
+                    # Try to convert to integer
+                    numeric_parts.append((0, int(part)))  # (type, value) - 0 for numbers
                 except ValueError:
-                    numeric_parts.append(part)
+                    # Keep as string with different type marker
+                    numeric_parts.append((1, part))  # (type, value) - 1 for strings
             
             return numeric_parts
         
@@ -283,6 +338,30 @@ def analyze_operator(operator_path):
         
         # Convert to sorted list
         result['openshift_versions'] = sorted(result['openshift_versions'])
+        
+        # Add certification risk analysis
+        result['certification_risk'] = calculate_certification_risk(result)
+        
+        # Analyze version types across all versions
+        if result['versions']:
+            version_types_found = set()
+            for version_info in result['versions']:
+                annotations = version_info.get('annotations', {})
+                if isinstance(annotations, dict):
+                    openshift_versions_str = annotations.get('com.redhat.openshift.versions', '')
+                    version_type = analyze_version_type(openshift_versions_str)
+                    if version_type != 'none':
+                        version_types_found.add(version_type)
+            
+            # Determine overall version type
+            if len(version_types_found) == 0:
+                result['version_type'] = 'none'
+            elif len(version_types_found) == 1:
+                result['version_type'] = list(version_types_found)[0]
+            else:
+                result['version_type'] = 'mixed'
+        else:
+            result['version_type'] = 'none'
         
     except Exception as e:
         result['error'] = str(e)
@@ -354,6 +433,21 @@ def main():
             all_openshift_versions.add(version)
             openshift_version_counts[version] += 1
     
+    # Certification risk statistics
+    risk_counts = defaultdict(int)
+    version_type_counts = defaultdict(int)
+    
+    for result in results:
+        risk_level = result.get('certification_risk', 'unknown')
+        risk_counts[risk_level] += 1
+        
+        version_type = result.get('version_type', 'none')
+        version_type_counts[version_type] += 1
+    
+    # Calculate Red Hat policy affected operators
+    high_risk_operators = [r for r in results if r.get('certification_risk') == 'high']
+    operators_at_risk = len(high_risk_operators)
+    
     summary = {
         'analysis_timestamp': datetime.datetime.now().isoformat(),
         'total_operators': total_operators,
@@ -364,6 +458,9 @@ def main():
         'openshift_version_counts': dict(openshift_version_counts),
         'fbc_operators': fbc_operators,
         'fbc_openshift_version_counts': dict(fbc_openshift_versions),
+        'certification_risk_counts': dict(risk_counts),
+        'version_type_counts': dict(version_type_counts),
+        'operators_at_risk': operators_at_risk,
         'errors': len(errors)
     }
     
@@ -386,8 +483,8 @@ def main():
             writer = csv.writer(f)
             writer.writerow([
                 'operator_name', 'total_versions', 'latest_version', 
-                'openshift_versions', 'last_update', 'has_ci_yaml', 
-                'has_makefile', 'error'
+                'openshift_versions', 'last_update', 'certification_risk',
+                'version_type', 'has_ci_yaml', 'has_makefile', 'error'
             ])
             
             for result in results:
@@ -397,6 +494,8 @@ def main():
                     result['latest_version'],
                     ','.join(result['openshift_versions']),
                     result['last_update'],
+                    result.get('certification_risk', 'unknown'),
+                    result.get('version_type', 'none'),
                     result['has_ci_yaml'],
                     result['has_makefile'],
                     result['error'] or ''
@@ -416,6 +515,20 @@ def main():
         for version in summary['all_openshift_versions']:
             count = summary['openshift_version_counts'][version]
             print(f"  {version}: {count} operators")
+        
+        print(f"\nCertification Risk Analysis:")
+        print(f"  High risk operators (will be dropped from v4.19): {summary['operators_at_risk']}")
+        for risk_level, count in summary['certification_risk_counts'].items():
+            print(f"  {risk_level.title()} risk: {count} operators")
+        
+        print(f"\nVersion Type Distribution:")
+        for version_type, count in summary['version_type_counts'].items():
+            print(f"  {version_type.replace('_', ' ').title()}: {count} operators")
+        
+        if summary['operators_at_risk'] > 0:
+            print(f"\nHigh Risk Operators (Red Hat Policy Affected):")
+            for op in high_risk_operators[:10]:  # Show first 10 high-risk operators
+                print(f"  {op['name']}: {op['last_update']} ({op.get('version_type', 'unknown')} versioning)")
         
         print(f"\nTop 10 most recently updated operators:")
         sorted_operators = sorted(
