@@ -1,0 +1,47 @@
+# GitHub Pages configuration for Certified Operators Analysis
+
+title: "Certified Operators Analysis"
+description: "Automated analysis and insights into the Red Hat Certified Operators ecosystem"
+
+# Theme
+theme: minima
+
+# Enable plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+
+# Collections and defaults
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+# Exclude files from processing
+exclude:
+  - vendor/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - README.md
+
+# Include additional files
+include:
+  - _pages
+
+# Markdown processing
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# Build settings
+future: false
+unpublished: false
+safe: true
+incremental: false
+highlighter: rouge
+gist:
+  noscript: false

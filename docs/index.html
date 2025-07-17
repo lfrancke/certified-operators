@@ -1,0 +1,1299 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certified Operators Analysis Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #3498db;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        .chart-container {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        .bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .bar-label {
+            width: 80px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        .bar-fill {
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            height: 25px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .timestamp {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ecf0f1;
+            color: #7f8c8d;
+        }
+        .no-versions {
+            color: #e74c3c;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Certified Operators Analysis Report</h1>
+        <p style="text-align: center; margin: 20px 0;"><a href="data.html" style="color: #3498db; text-decoration: none; font-weight: 600;">📥 Download Data Files</a></p>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">477</div>
+                <div class="stat-label">Total Operators</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">286</div>
+                <div class="stat-label">With Versions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">3,784</div>
+                <div class="stat-label">Total Versions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15</div>
+                <div class="stat-label">FBC Operators</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">18</div>
+                <div class="stat-label">OpenShift Versions</div>
+            </div>
+        </div>
+
+        <h2>📊 OpenShift Version Support</h2>
+        <div class="chart-container">
+            <h3>Top 10 OpenShift Versions by Operator Count</h3>
+
+            <div class="bar">
+                <div class="bar-label">v4.14</div>
+                <div class="bar-fill" style="width: 100.0%;">
+                    229 operators (48.0%)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">v4.15</div>
+                <div class="bar-fill" style="width: 100.0%;">
+                    229 operators (48.0%)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">v4.12</div>
+                <div class="bar-fill" style="width: 97.81659388646288%;">
+                    224 operators (47.0%)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">v4.16</div>
+                <div class="bar-fill" style="width: 97.81659388646288%;">
+                    224 operators (47.0%)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">v4.13</div>
+                <div class="bar-fill" style="width: 96.50655021834062%;">
+                    221 operators (46.3%)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">v4.17</div>
+                <div class="bar-fill" style="width: 95.63318777292577%;">
+                    219 operators (45.9%)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">v4.11</div>
+                <div class="bar-fill" style="width: 87.33624454148472%;">
+                    200 operators (41.9%)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">v4.18</div>
+                <div class="bar-fill" style="width: 85.1528384279476%;">
+                    195 operators (40.9%)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">v4.10</div>
+                <div class="bar-fill" style="width: 80.78602620087337%;">
+                    185 operators (38.8%)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">v4.9</div>
+                <div class="bar-fill" style="width: 73.36244541484717%;">
+                    168 operators (35.2%)
+                </div>
+            </div>
+
+        </div>
+
+        <h2>📦 File-Based Catalogs (FBC) Analysis</h2>
+        <div class="chart-container">
+            <h3>FBC Operators by OpenShift Version</h3>
+
+            <div class="bar">
+                <div class="bar-label">v4.12</div>
+                <div class="bar-fill" style="width: 100.0%; background: linear-gradient(90deg, #9b59b6, #8e44ad);">
+                    9 FBC operators
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">v4.13</div>
+                <div class="bar-fill" style="width: 100.0%; background: linear-gradient(90deg, #9b59b6, #8e44ad);">
+                    9 FBC operators
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">v4.14</div>
+                <div class="bar-fill" style="width: 100.0%; background: linear-gradient(90deg, #9b59b6, #8e44ad);">
+                    9 FBC operators
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">v4.15</div>
+                <div class="bar-fill" style="width: 100.0%; background: linear-gradient(90deg, #9b59b6, #8e44ad);">
+                    9 FBC operators
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">v4.16</div>
+                <div class="bar-fill" style="width: 100.0%; background: linear-gradient(90deg, #9b59b6, #8e44ad);">
+                    9 FBC operators
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">v4.17</div>
+                <div class="bar-fill" style="width: 100.0%; background: linear-gradient(90deg, #9b59b6, #8e44ad);">
+                    9 FBC operators
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">v4.18</div>
+                <div class="bar-fill" style="width: 100.0%; background: linear-gradient(90deg, #9b59b6, #8e44ad);">
+                    9 FBC operators
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">v4.19</div>
+                <div class="bar-fill" style="width: 44.44444444444444%; background: linear-gradient(90deg, #9b59b6, #8e44ad);">
+                    4 FBC operators
+                </div>
+            </div>
+
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>FBC OpenShift Version</th>
+                    <th>Operators</th>
+                    <th>Percentage of FBC</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td><strong>v4.12</strong></td>
+                    <td>9</td>
+                    <td>60.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.13</strong></td>
+                    <td>9</td>
+                    <td>60.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.14</strong></td>
+                    <td>9</td>
+                    <td>60.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.15</strong></td>
+                    <td>9</td>
+                    <td>60.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.16</strong></td>
+                    <td>9</td>
+                    <td>60.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.17</strong></td>
+                    <td>9</td>
+                    <td>60.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.18</strong></td>
+                    <td>9</td>
+                    <td>60.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.19</strong></td>
+                    <td>4</td>
+                    <td>26.7%</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <h2>🏆 Top Operators by Version Count</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Operator Name</th>
+                    <th>Version Count</th>
+                    <th>OpenShift Versions</th>
+                    <th>Last Updated</th>
+                    <th>FBC</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td><strong>kubeturbo-certified</strong></td>
+                    <td>189</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 10 more</td>
+                    <td class="timestamp">2025-07-16</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>prometurbo-certified</strong></td>
+                    <td>153</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 10 more</td>
+                    <td class="timestamp">2025-07-16</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>scaleops-operator</strong></td>
+                    <td>134</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 5 more</td>
+                    <td class="timestamp">2025-07-13</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>gitlab-operator-kubernetes</strong></td>
+                    <td>119</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 8 more</td>
+                    <td class="timestamp">2025-07-09</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>cilium-enterprise</strong></td>
+                    <td>95</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 7 more</td>
+                    <td class="timestamp">2025-07-16</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>cloud-native-postgresql</strong></td>
+                    <td>90</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 9 more</td>
+                    <td class="timestamp">2025-06-06</td>
+                    <td style="text-align: center;">✅</td>
+                </tr>
+
+                <tr>
+                    <td><strong>uma-operator</strong></td>
+                    <td>61</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 8 more</td>
+                    <td class="timestamp">2025-07-07</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>aqua-operator-certified</strong></td>
+                    <td>60</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 11 more</td>
+                    <td class="timestamp">2025-06-18</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>tawon-operator</strong></td>
+                    <td>58</td>
+                    <td>v4.12, v4.13, v4.14, v4.15, v4.16 + 4 more</td>
+                    <td class="timestamp">2025-06-05</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>cilium</strong></td>
+                    <td>54</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 7 more</td>
+                    <td class="timestamp">2024-02-20</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>uma-admin-operator</strong></td>
+                    <td>51</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 6 more</td>
+                    <td class="timestamp">2025-07-07</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>uma-team-operator</strong></td>
+                    <td>51</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 6 more</td>
+                    <td class="timestamp">2025-07-07</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>fujitsu-enterprise-postgres-operator</strong></td>
+                    <td>49</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 10 more</td>
+                    <td class="timestamp">2025-07-08</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>instana-agent-operator</strong></td>
+                    <td>49</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 11 more</td>
+                    <td class="timestamp">2025-07-10</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>k8s-triliovault</strong></td>
+                    <td>48</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 10 more</td>
+                    <td class="timestamp">2025-06-03</td>
+                    <td style="text-align: center;">✅</td>
+                </tr>
+
+                <tr>
+                    <td><strong>confluent-for-kubernetes</strong></td>
+                    <td>47</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 11 more</td>
+                    <td class="timestamp">2025-06-19</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>couchbase-enterprise-certified</strong></td>
+                    <td>43</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 6 more</td>
+                    <td class="timestamp">2025-07-15</td>
+                    <td style="text-align: center;">✅</td>
+                </tr>
+
+                <tr>
+                    <td><strong>dynatrace-operator</strong></td>
+                    <td>43</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 9 more</td>
+                    <td class="timestamp">2025-07-08</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>tenant-operator</strong></td>
+                    <td>40</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 10 more</td>
+                    <td class="timestamp">2025-06-12</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>portworx-certified</strong></td>
+                    <td>39</td>
+                    <td>v4.10, v4.11, v4.12, v4.13, v4.14 + 10 more</td>
+                    <td class="timestamp">2025-07-08</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <h2>⏰ Recently Updated Operators</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Operator Name</th>
+                    <th>Last Updated</th>
+                    <th>Version Count</th>
+                    <th>OpenShift Versions</th>
+                    <th>FBC</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td><strong>cilium-enterprise</strong></td>
+                    <td class="timestamp">2025-07-16 10:35</td>
+                    <td>95</td>
+                    <td>v4.10, v4.11, v4.12 + 9 more</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>neuvector-certified-operator</strong></td>
+                    <td class="timestamp">2025-07-16 09:34</td>
+                    <td>21</td>
+                    <td>v4.10, v4.11, v4.12 + 14 more</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>isovalent-networking</strong></td>
+                    <td class="timestamp">2025-07-16 08:26</td>
+                    <td>3</td>
+                    <td>v4.14, v4.15, v4.16 + 4 more</td>
+                    <td style="text-align: center;">✅</td>
+                </tr>
+
+                <tr>
+                    <td><strong>kubeturbo-certified</strong></td>
+                    <td class="timestamp">2025-07-16 04:49</td>
+                    <td>189</td>
+                    <td>v4.10, v4.11, v4.12 + 12 more</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>t8c-certified</strong></td>
+                    <td class="timestamp">2025-07-16 04:34</td>
+                    <td>0</td>
+                    <td><span class="no-versions">No versions</span></td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>prometurbo-certified</strong></td>
+                    <td class="timestamp">2025-07-16 04:31</td>
+                    <td>153</td>
+                    <td>v4.10, v4.11, v4.12 + 12 more</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>stackgres-certified</strong></td>
+                    <td class="timestamp">2025-07-15 21:52</td>
+                    <td>33</td>
+                    <td>v4.10, v4.11, v4.12 + 8 more</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>couchbase-enterprise-certified</strong></td>
+                    <td class="timestamp">2025-07-15 21:18</td>
+                    <td>43</td>
+                    <td>v4.10, v4.11, v4.12 + 8 more</td>
+                    <td style="text-align: center;">✅</td>
+                </tr>
+
+                <tr>
+                    <td><strong>app-insights-operator</strong></td>
+                    <td class="timestamp">2025-07-15 20:35</td>
+                    <td>16</td>
+                    <td>v4.10, v4.11, v4.12 + 8 more</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>cloudera-streams-messaging-kubernetes-operator</strong></td>
+                    <td class="timestamp">2025-07-14 18:47</td>
+                    <td>3</td>
+                    <td>v4.10, v4.11, v4.12 + 8 more</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>t8c-tsc-client-certified</strong></td>
+                    <td class="timestamp">2025-07-14 15:47</td>
+                    <td>34</td>
+                    <td>v4.10, v4.11, v4.12 + 9 more</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>nginx-ingress-operator</strong></td>
+                    <td class="timestamp">2025-07-14 13:51</td>
+                    <td>33</td>
+                    <td>v4.10, v4.11, v4.12 + 12 more</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>nvidia-maintenance-operator</strong></td>
+                    <td class="timestamp">2025-07-13 16:54</td>
+                    <td>4</td>
+                    <td>v4.14, v4.15, v4.16 + 4 more</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>scaleops-operator</strong></td>
+                    <td class="timestamp">2025-07-13 16:16</td>
+                    <td>134</td>
+                    <td>v4.10, v4.11, v4.12 + 7 more</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>nxiq-operator-certified</strong></td>
+                    <td class="timestamp">2025-07-11 21:56</td>
+                    <td>12</td>
+                    <td>v4.10, v4.11, v4.12 + 12 more</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>cpd-platform-operator</strong></td>
+                    <td class="timestamp">2025-07-11 16:23</td>
+                    <td>1</td>
+                    <td>v4.12, v4.13, v4.14 + 4 more</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>habana-ai-operator</strong></td>
+                    <td class="timestamp">2025-07-11 11:35</td>
+                    <td>28</td>
+                    <td>v4.12, v4.13, v4.14 + 6 more</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>kubecost-operator</strong></td>
+                    <td class="timestamp">2025-07-11 00:52</td>
+                    <td>4</td>
+                    <td>v4.11, v4.12, v4.13 + 7 more</td>
+                    <td style="text-align: center;">✅</td>
+                </tr>
+
+                <tr>
+                    <td><strong>hspc-operator</strong></td>
+                    <td class="timestamp">2025-07-11 00:29</td>
+                    <td>16</td>
+                    <td>v4.10, v4.11, v4.12 + 10 more</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+                <tr>
+                    <td><strong>instana-agent-operator</strong></td>
+                    <td class="timestamp">2025-07-10 21:12</td>
+                    <td>49</td>
+                    <td>v4.10, v4.11, v4.12 + 13 more</td>
+                    <td style="text-align: center;">❌</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <h2>🏢 Top Vendors</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Vendor Prefix</th>
+                    <th>Operator Count</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td><strong>ibm</strong></td>
+                    <td>50</td>
+                    <td>10.5%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>keysight</strong></td>
+                    <td>26</td>
+                    <td>5.5%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>stackable</strong></td>
+                    <td>15</td>
+                    <td>3.1%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>citrix</strong></td>
+                    <td>5</td>
+                    <td>1.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>cortex</strong></td>
+                    <td>5</td>
+                    <td>1.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>mongodb</strong></td>
+                    <td>5</td>
+                    <td>1.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>operator</strong></td>
+                    <td>5</td>
+                    <td>1.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>mf</strong></td>
+                    <td>4</td>
+                    <td>0.8%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>minio</strong></td>
+                    <td>4</td>
+                    <td>0.8%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>robin</strong></td>
+                    <td>4</td>
+                    <td>0.8%</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <h2>🔥 Vendor Freshness Analysis</h2>
+        <p>Analysis of which vendors are actively maintaining their operators (last 6 months)</p>
+        
+        <div class="chart-container">
+            <h3>Vendor Freshness Score (% operators updated in last 6 months)</h3>
+
+            <div class="bar">
+                <div class="bar-label">infoscale</div>
+                <div class="bar-fill" style="width: 100.0%; background: linear-gradient(90deg, #3498db, #2ecc71);">
+                    100.0% (3/3)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">percona</div>
+                <div class="bar-fill" style="width: 100.0%; background: linear-gradient(90deg, #3498db, #2ecc71);">
+                    100.0% (3/3)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">stackable</div>
+                <div class="bar-fill" style="width: 100.0%; background: linear-gradient(90deg, #e74c3c, #c0392b);">
+                    100.0% (15/15)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">uma</div>
+                <div class="bar-fill" style="width: 100.0%; background: linear-gradient(90deg, #3498db, #2ecc71);">
+                    100.0% (3/3)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">minio</div>
+                <div class="bar-fill" style="width: 75.0%; background: linear-gradient(90deg, #3498db, #2ecc71);">
+                    75.0% (3/4)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">gitlab</div>
+                <div class="bar-fill" style="width: 66.66666666666666%; background: linear-gradient(90deg, #3498db, #2ecc71);">
+                    66.7% (2/3)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">hpe</div>
+                <div class="bar-fill" style="width: 66.66666666666666%; background: linear-gradient(90deg, #3498db, #2ecc71);">
+                    66.7% (2/3)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">mongodb</div>
+                <div class="bar-fill" style="width: 60.0%; background: linear-gradient(90deg, #3498db, #2ecc71);">
+                    60.0% (3/5)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">ibm</div>
+                <div class="bar-fill" style="width: 38.0%; background: linear-gradient(90deg, #3498db, #2ecc71);">
+                    38.0% (19/50)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">intel</div>
+                <div class="bar-fill" style="width: 33.33333333333333%; background: linear-gradient(90deg, #3498db, #2ecc71);">
+                    33.3% (1/3)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">operator</div>
+                <div class="bar-fill" style="width: 20.0%; background: linear-gradient(90deg, #3498db, #2ecc71);">
+                    20.0% (1/5)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">citrix</div>
+                <div class="bar-fill" style="width: 0.0%; background: linear-gradient(90deg, #3498db, #2ecc71);">
+                    0.0% (0/5)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">cortex</div>
+                <div class="bar-fill" style="width: 0.0%; background: linear-gradient(90deg, #3498db, #2ecc71);">
+                    0.0% (0/5)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">joget</div>
+                <div class="bar-fill" style="width: 0.0%; background: linear-gradient(90deg, #3498db, #2ecc71);">
+                    0.0% (0/3)
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">keysight</div>
+                <div class="bar-fill" style="width: 0.0%; background: linear-gradient(90deg, #3498db, #2ecc71);">
+                    0.0% (0/26)
+                </div>
+            </div>
+
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Vendor</th>
+                    <th>Total Operators</th>
+                    <th>Recent Updates</th>
+                    <th>Freshness Score</th>
+                    <th>Avg Days Old</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr >
+                    <td><strong>infoscale</strong></td>
+                    <td>3</td>
+                    <td>3</td>
+                    <td>100.0%</td>
+                    <td>155 days</td>
+                </tr>
+
+                <tr >
+                    <td><strong>percona</strong></td>
+                    <td>3</td>
+                    <td>3</td>
+                    <td>100.0%</td>
+                    <td>77 days</td>
+                </tr>
+
+                <tr style="background-color: #fff3cd;">
+                    <td><strong>stackable  🎯</strong></td>
+                    <td>15</td>
+                    <td>15</td>
+                    <td>100.0%</td>
+                    <td>92 days</td>
+                </tr>
+
+                <tr >
+                    <td><strong>uma</strong></td>
+                    <td>3</td>
+                    <td>3</td>
+                    <td>100.0%</td>
+                    <td>9 days</td>
+                </tr>
+
+                <tr >
+                    <td><strong>minio</strong></td>
+                    <td>4</td>
+                    <td>3</td>
+                    <td>75.0%</td>
+                    <td>156 days</td>
+                </tr>
+
+                <tr >
+                    <td><strong>gitlab</strong></td>
+                    <td>3</td>
+                    <td>2</td>
+                    <td>66.7%</td>
+                    <td>474 days</td>
+                </tr>
+
+                <tr >
+                    <td><strong>hpe</strong></td>
+                    <td>3</td>
+                    <td>2</td>
+                    <td>66.7%</td>
+                    <td>112 days</td>
+                </tr>
+
+                <tr >
+                    <td><strong>mongodb</strong></td>
+                    <td>5</td>
+                    <td>3</td>
+                    <td>60.0%</td>
+                    <td>577 days</td>
+                </tr>
+
+                <tr >
+                    <td><strong>ibm</strong></td>
+                    <td>50</td>
+                    <td>19</td>
+                    <td>38.0%</td>
+                    <td>848 days</td>
+                </tr>
+
+                <tr >
+                    <td><strong>intel</strong></td>
+                    <td>3</td>
+                    <td>1</td>
+                    <td>33.3%</td>
+                    <td>469 days</td>
+                </tr>
+
+                <tr >
+                    <td><strong>operator</strong></td>
+                    <td>5</td>
+                    <td>1</td>
+                    <td>20.0%</td>
+                    <td>1114 days</td>
+                </tr>
+
+                <tr >
+                    <td><strong>citrix</strong></td>
+                    <td>5</td>
+                    <td>0</td>
+                    <td>0.0%</td>
+                    <td>1026 days</td>
+                </tr>
+
+                <tr >
+                    <td><strong>cortex</strong></td>
+                    <td>5</td>
+                    <td>0</td>
+                    <td>0.0%</td>
+                    <td>1387 days</td>
+                </tr>
+
+                <tr >
+                    <td><strong>joget</strong></td>
+                    <td>3</td>
+                    <td>0</td>
+                    <td>0.0%</td>
+                    <td>890 days</td>
+                </tr>
+
+                <tr >
+                    <td><strong>keysight</strong></td>
+                    <td>26</td>
+                    <td>0</td>
+                    <td>0.0%</td>
+                    <td>670 days</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <h2>📈 OpenShift Version Distribution</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>OpenShift Version</th>
+                    <th>Operators</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td><strong>v4.14</strong></td>
+                    <td>229</td>
+                    <td>48.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.15</strong></td>
+                    <td>229</td>
+                    <td>48.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.12</strong></td>
+                    <td>224</td>
+                    <td>47.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.16</strong></td>
+                    <td>224</td>
+                    <td>47.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.13</strong></td>
+                    <td>221</td>
+                    <td>46.3%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.17</strong></td>
+                    <td>219</td>
+                    <td>45.9%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.11</strong></td>
+                    <td>200</td>
+                    <td>41.9%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.18</strong></td>
+                    <td>195</td>
+                    <td>40.9%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.10</strong></td>
+                    <td>185</td>
+                    <td>38.8%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.9</strong></td>
+                    <td>168</td>
+                    <td>35.2%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.8</strong></td>
+                    <td>167</td>
+                    <td>35.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.19</strong></td>
+                    <td>159</td>
+                    <td>33.3%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.20</strong></td>
+                    <td>145</td>
+                    <td>30.4%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.7</strong></td>
+                    <td>140</td>
+                    <td>29.4%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.6</strong></td>
+                    <td>100</td>
+                    <td>21.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.5</strong></td>
+                    <td>7</td>
+                    <td>1.5%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.4</strong></td>
+                    <td>2</td>
+                    <td>0.4%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>v4.3</strong></td>
+                    <td>1</td>
+                    <td>0.2%</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <h2>📅 Update Timeline</h2>
+        <div class="chart-container">
+            <h3>Operator Updates by Half-Year</h3>
+
+            <div class="bar">
+                <div class="bar-label">2025-H2</div>
+                <div class="bar-fill" style="width: 28.643216080402013%;">
+                    57 operators
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">2025-H1</div>
+                <div class="bar-fill" style="width: 53.266331658291456%;">
+                    106 operators
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">2024-H2</div>
+                <div class="bar-fill" style="width: 7.537688442211055%;">
+                    15 operators
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">2024-H1</div>
+                <div class="bar-fill" style="width: 6.030150753768844%;">
+                    12 operators
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">2023-H2</div>
+                <div class="bar-fill" style="width: 15.577889447236181%;">
+                    31 operators
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">2023-H1</div>
+                <div class="bar-fill" style="width: 8.542713567839195%;">
+                    17 operators
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">2022-H2</div>
+                <div class="bar-fill" style="width: 12.060301507537687%;">
+                    24 operators
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">2022-H1</div>
+                <div class="bar-fill" style="width: 8.040201005025125%;">
+                    16 operators
+                </div>
+            </div>
+
+            <div class="bar">
+                <div class="bar-label">2021-H2</div>
+                <div class="bar-fill" style="width: 100.0%;">
+                    199 operators
+                </div>
+            </div>
+
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Period</th>
+                    <th>Updates</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td><strong>2025-H2</strong></td>
+                    <td>57</td>
+                    <td>11.9%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>2025-H1</strong></td>
+                    <td>106</td>
+                    <td>22.2%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>2024-H2</strong></td>
+                    <td>15</td>
+                    <td>3.1%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>2024-H1</strong></td>
+                    <td>12</td>
+                    <td>2.5%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>2023-H2</strong></td>
+                    <td>31</td>
+                    <td>6.5%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>2023-H1</strong></td>
+                    <td>17</td>
+                    <td>3.6%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>2022-H2</strong></td>
+                    <td>24</td>
+                    <td>5.0%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>2022-H1</strong></td>
+                    <td>16</td>
+                    <td>3.4%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>2021-H2</strong></td>
+                    <td>199</td>
+                    <td>41.7%</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <div class="footer">
+
+            <p>Report generated on 2025-07-17 08:50:24</p>
+            <p>Analysis includes 191 operators without published versions and 15 operators with FBC support</p>
+        </div>
+    </div>
+</body>
+</html>
