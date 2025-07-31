@@ -97,10 +97,10 @@ def generate_html_report(data):
             stats['freshness_score'] = (stats['recent_updates'] / stats['count']) * 100
             stats['recent_percentage'] = (stats['recent_updates'] / stats['count']) * 100
     
-    # Sort vendors by freshness score (recent updates percentage)
+    # Sort vendors by freshness score (recent updates percentage), then by recent_updates, then by count
     fresh_vendors = sorted(
         [(vendor, stats) for vendor, stats in vendor_freshness.items() if stats['count'] >= 3],
-        key=lambda x: x[1]['freshness_score'], reverse=True
+        key=lambda x: (x[1]['freshness_score'], x[1]['recent_updates'], x[1]['count']), reverse=True
     )[:15]
     
     html = f"""
@@ -607,7 +607,7 @@ def generate_html_report(data):
             <div class="bar">
                 <div class="bar-label">{vendor}</div>
                 <div class="bar-container">
-                    <div class="bar-fill" style="width: {bar_width}%; background: {'linear-gradient(90deg, #e74c3c, #c0392b)' if vendor == 'stackable' else 'linear-gradient(90deg, #3498db, #2ecc71)'};">
+                    <div class="bar-fill" style="width: {bar_width}%; background: {'linear-gradient(90deg, #B80068, #8B004F)' if vendor == 'stackable' else 'linear-gradient(90deg, #3498db, #2ecc71)'};">
                         {stats['freshness_score']:.1f}% ({stats['recent_updates']}/{stats['count']})
                     </div>
                 </div>
@@ -730,6 +730,13 @@ def generate_html_report(data):
     html += f"""
             <p>Report generated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
             <p>Analysis includes {operators_without_versions} operators without published versions and {fbc_operators} operators with FBC support</p>
+            <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
+                <p style="margin: 0; font-size: 0.9em; color: #495057;">
+                    <strong>About Stackable:</strong> Stackable provides cloud-native data platform operators for Kubernetes. 
+                    Learn more at <a href="https://stackable.tech" target="_blank" style="color: #B80068;">stackable.tech</a> 
+                    or check out our <a href="https://docs.stackable.tech" target="_blank" style="color: #B80068;">documentation</a>.
+                </p>
+            </div>
         </div>
     </div>
 </body>
